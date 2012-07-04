@@ -30,6 +30,36 @@ minetest.register_node("roof:thatch", {
 	},
 })
 
+minetest.register_node("roof:bluecanvas", {
+	description = "Blue Striped Canvas",
+	tile_images = {"roof_bluecanvas.png"},
+	paramtype = "light",
+	drawtype = "raillike",
+	is_ground_content = true,
+	inventory_image = "roof_thatch.png",
+	wield_image = "roof_thatch.png",
+	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
+	sounds = default.node_sound_leaves_defaults(),
+	selection_box = {
+		type = "fixed",
+	},
+})
+
+minetest.register_node("roof:redcanvas", {
+	description = "Red Striped Canvas",
+	tile_images = {"roof_redcanvas.png"},
+	paramtype = "light",
+	drawtype = "raillike",
+	is_ground_content = true,
+	inventory_image = "roof_thatch.png",
+	wield_image = "roof_thatch.png",
+	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
+	sounds = default.node_sound_leaves_defaults(),
+	selection_box = {
+		type = "fixed",
+	},
+})
+
 minetest.register_node("roof:slatetile", {
 	description = "Slate Tile",
 	tile_images = {"roof_slatetile.png"},
@@ -69,6 +99,22 @@ minetest.register_craft({
 	recipe = {
 		{'"default:junglegrass"'},
 		{'"default:junglegrass"'},
+	}
+})
+
+minetest.register_craft({
+	output = '"roof:bluecanvas" 4',
+	recipe = {
+		{'"roof:thatch"'},
+		{'"flowers:flower_viola"'},
+	}
+})
+
+minetest.register_craft({
+	output = '"roof:redcanvas" 4',
+	recipe = {
+		{'"roof:thatch"'},
+		{'"flowers:flower_rose'},
 	}
 })
 
