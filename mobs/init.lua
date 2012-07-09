@@ -72,26 +72,26 @@ end
 
 mobs.spawn_on_surface = function(nname)
 	minetest.register_abm({
-	nodenames = { "default:dirt_with_grass" },
-	interval = 1200,
-	chance = 30,
-	action = function(pos, node, active_object_count, active_object_count_wider)
-		local p_top = {
-			x = pos.x,
-			y = pos.y + 1,
-			z = pos.z
-		}
-		local n_top = minetest.env:get_node(p_top)
-		local rnd = math.random(1, 2000)
+		nodenames = { "default:dirt_with_grass" },
+		interval = 1200,
+		chance = 30,
+		action = function(pos, node, active_object_count, active_object_count_wider)
+			local p_top = {
+				x = pos.x,
+				y = pos.y + 1,
+				z = pos.z
+			}
+			local n_top = minetest.env:get_node(p_top)
+			local rnd = math.random(1, 4)
 
-		if n_top.name == "air" then
-			if 4 < rnd then
-				if is_node_in_cube(nname, p_top, 15) == false then
-					minetest.env:add_node(p_top, { name = nname })
+			if n_top.name == "air" then
+				if rnd == 1 then
+					if is_node_in_cube(nname, p_top, 15) == false then
+						minetest.env:add_node(p_top, { name = nname })
+					end
 				end
 			end
 		end
-	end
 	})
 end
 
