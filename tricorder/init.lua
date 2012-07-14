@@ -39,25 +39,37 @@ minetest.register_node("tricorder:tricorder", {
 		type = "fixed",
 		fixed = {
 			-- x,y,z,x,y,z
-			{0, -0.1, -0.2, 0.1, 0.5, 0.2},
+			{0, -0.2, -0.2, 0.1, 0.5, 0.2},
 			{0.1, -0.4, -0.2, 0.2, -0.1, 0.2},
 			{0.1, 0.2, -0.2, 0.2, 0.5, 0.2},
 		},
 	},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name()
-		local node = minetest.env:get_node(pointed_thing.above)
+		local node
 		local pos
 		local ppos
 		local found = false
-		if node.name == "air" then
-			node = minetest.env:get_node(pointed_thing.under)
-			pos = pointed_thing.under
+
+		if pointed_thing.type == 'node' then
+			node = minetest.env:get_node(pointed_thing.above)
+			if node.name == "air" then
+				node = minetest.env:get_node(pointed_thing.under)
+				pos = pointed_thing.under
+			else
+				pos = pointed_thing.above
+			end
+			ppos = pos
+			minetest.chat_send_player(name, 'Tricorder: pointing at '..node.name..' '..minetest.pos_to_string(pos))
+		elseif pointed_thing.type == 'object' then
+			pos = pointed_thing.ref:getpos()
+			ppos = pos
+			minetest.chat_send_player(name, 'Tricorder: pointing at Object '..minetest.pos_to_string(pos))
 		else
-			pos = pointed_thing.above
+			pos = user:getpos()
+			ppos = {x = math.floor(pos.x),y = math.floor(pos.y),z = math.floor(pos.z)}
+			minetest.chat_send_player(name, 'Tricorder: pointing at Air from '..minetest.pos_to_string(ppos))
 		end
-		ppos = pos
-		minetest.chat_send_player(name, 'Tricorder: pointing at '..node.name..' '..minetest.pos_to_string(pos))
 		for i,n in ipairs(searches) do
 			pos = minetest.env:find_node_near(ppos,16,n.node)
 			if pos then
