@@ -55,21 +55,6 @@ mobs.move = function(pos, node)
 	minetest.env:add_node(npos,node)
 end
 
-local is_node_in_cube = function(nodenames, node_pos, radius)
-	for x = node_pos.x - radius, node_pos.x + radius do
-		for y = node_pos.y - radius, node_pos.y + radius do
-			for z = node_pos.z - radius, node_pos.z + radius do
-				n = minetest.env:get_node_or_nil({x = x, y = y, z = z})
-				if not n or n.name == nname then
-					return true
-				end
-			end
-		end
-	end
-
-	return false
-end
-
 mobs.spawn_on_surface = function(nname)
 	minetest.register_abm({
 		nodenames = { "default:dirt_with_grass" },
@@ -86,7 +71,7 @@ mobs.spawn_on_surface = function(nname)
 
 			if n_top.name == "air" then
 				if rnd == 1 then
-					if is_node_in_cube(nname, p_top, 15) == false then
+					if not minetest.env:find_node_near(p_top, 40, nname) then
 						minetest.env:add_node(p_top, { name = nname })
 					end
 				end
@@ -99,6 +84,8 @@ minetest.register_node("mobs:pig", {
 	description = "pig",
 	drawtype = "nodebox",
 	tiles = {"mobs_pig.png"},
+	tiles = {"mobs_pig_top.png", "mobs_pig_bottom.png", "mobs_pig_side.png",
+		"mobs_pig_side.png", "mobs_pig_back.png", "mobs_pig_front.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {fleshy=2,crumbly=2},
@@ -109,17 +96,19 @@ minetest.register_node("mobs:pig", {
 		fixed = {
 			-- x,y,z,x,y,z
 			-- body
-			{-0.2, 0, -0.5, 0.2, 0.5, -0.1},
+			{-0.3, -0.2, -0.3, 0.3, 0.2, 0.5},
 			-- head
-			{-0.3, -0.2, -0.3, 0.3, 0.3, 0.5},
+			{-0.2, 0, -0.4, 0.2, 0.4, -0.1},
+			-- snout
+			{-0.1, 0.1, -0.5, 0.1, 0.3, -0.4},
 			-- front right leg
-			{-0.4, -0.5, -0.3, -0.2, 0.1, -0.1},
+			{-0.4, -0.5, -0.2, -0.2, 0.1, 0.0},
 			-- front left leg
-			{0.2, -0.5, -0.3, 0.4, 0.1, -0.1},
+			{0.2, -0.5, -0.2, 0.4, 0.1, 0.0},
 			-- back right leg
-			{-0.4, -0.5, 0.3, -0.2, 0.1, 0.1},
+			{-0.2, 0.1, 0.2, -0.4, -0.5, 0.4},
 			-- back left leg
-			{0.2, -0.5, 0.3, 0.4, 0.1, 0.1},
+			{0.4, 0.1, 0.2, 0.2, -0.5, 0.4},
 		},
 	},
 })
