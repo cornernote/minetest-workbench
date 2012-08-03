@@ -450,3 +450,20 @@ minetest.register_craft({
 		{'"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"'},
 	}
 })
+
+minetest.register_craft({
+    type = "shapeless",
+    output = 'default:mese',
+    recipe = {
+        "default:lava_source",
+        "default:lava_source",
+        "default:lava_source",
+        "default:water_source",
+        "default:water_source",
+        "default:water_source",
+        "default:water_source",
+        "default:water_source",
+        "default:water_source",
+        "default:water_source",
+    },
+})
