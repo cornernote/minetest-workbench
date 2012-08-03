@@ -27,6 +27,7 @@ minetest.register_node("roof:thatch", {
 	sounds = default.node_sound_leaves_defaults(),
 	selection_box = {
 		type = "fixed",
+		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
 	},
 })
 
@@ -36,12 +37,13 @@ minetest.register_node("roof:bluecanvas", {
 	paramtype = "light",
 	drawtype = "raillike",
 	is_ground_content = true,
-	inventory_image = "roof_thatch.png",
-	wield_image = "roof_thatch.png",
+	inventory_image = "roof_bluecanvas.png",
+	wield_image = "roof_bluecanvas.png",
 	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
 	sounds = default.node_sound_leaves_defaults(),
 	selection_box = {
 		type = "fixed",
+		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
 	},
 })
 
@@ -51,12 +53,13 @@ minetest.register_node("roof:redcanvas", {
 	paramtype = "light",
 	drawtype = "raillike",
 	is_ground_content = true,
-	inventory_image = "roof_thatch.png",
-	wield_image = "roof_thatch.png",
+	inventory_image = "roof_redcanvas.png",
+	wield_image = "roof_redcanvas.png",
 	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
 	sounds = default.node_sound_leaves_defaults(),
 	selection_box = {
 		type = "fixed",
+		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
 	},
 })
 
@@ -74,6 +77,7 @@ minetest.register_node("roof:slatetile", {
 	}),
 	selection_box = {
 		type = "fixed",
+		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
 	},
 })
 
@@ -91,45 +95,46 @@ minetest.register_node("roof:claytile", {
 	}),
 	selection_box = {
 		type = "fixed",
+		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
 	},
 })
 
 minetest.register_craft({
 	output = '"roof:thatch" 4',
 	recipe = {
-		{'"default:junglegrass"'},
-		{'"default:junglegrass"'},
+		{'default:junglegrass'},
+		{'default:junglegrass'},
 	}
 })
 
 minetest.register_craft({
 	output = '"roof:bluecanvas" 4',
 	recipe = {
-		{'"roof:thatch"'},
-		{'"flowers:flower_viola"'},
+		{'roof:thatch'},
+		{'flowers:flower_viola'},
 	}
 })
 
 minetest.register_craft({
 	output = '"roof:redcanvas" 4',
 	recipe = {
-		{'"roof:thatch"'},
-		{'"flowers:flower_rose'},
+		{'roof:thatch'},
+		{'flowers:flower_rose'},
 	}
 })
 
 minetest.register_craft({
 	output = '"roof:claytile" 4',
 	recipe = {
-		{'"default:clay"'},
-		{'"default:clay"'},
+		{'default:clay'},
+		{'default:clay'},
 	}
 })
 
 minetest.register_craft({
 	output = '"roof:slatetile" 4',
 	recipe = {
-		{'"default:stone"'},
-		{'"default:stone"'},
+		{'default:stone'},
+		{'default:stone'},
 	}
 })

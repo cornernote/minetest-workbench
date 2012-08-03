@@ -43,6 +43,21 @@ minetest.register_node("workbench:3x3", {
 		end
 		return false
 	end,
+	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+		if to_list == "dst" then
+			return 0
+		end
+		return count
+	end,
+	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		if listname == "dst" then
+			return 0
+		end
+		return stack:get_count()
+	end,
+	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+		return stack:get_count()
+	end,
 	on_metadata_inventory_move = function(pos, from_list, from_index,
 			to_list, to_index, count, player)
 		minetest.node_metadata_inventory_move_allow_all(
@@ -64,12 +79,7 @@ minetest.register_node("workbench:3x3", {
 			end
 		end
 	end,
-	on_metadata_inventory_offer = function(pos, listname, index, stack, player)
-		if listname == "dst" then
-			return stack
-		end
-		local post = minetest.node_metadata_inventory_offer_allow_all(
-				pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, listname, index, stack, player)
 		if listname == "table" then
 			local meta = minetest.env:get_meta(pos)
 			local inv = meta:get_inventory()
@@ -86,11 +96,8 @@ minetest.register_node("workbench:3x3", {
 				inv:set_stack("dst", 1, nil)
 			end
 		end
-		return post
 	end,
 	on_metadata_inventory_take = function(pos, listname, index, count, player)
-		local post = minetest.node_metadata_inventory_take_allow_all(
-				pos, listname, index, count, player)
 		if listname == "table" then
 			local meta = minetest.env:get_meta(pos)
 			local inv = meta:get_inventory()
@@ -166,6 +173,21 @@ minetest.register_node("workbench:4x4", {
 		end
 		return false
 	end,
+	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+		if to_list == "dst" then
+			return 0
+		end
+		return count
+	end,
+	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		if listname == "dst" then
+			return 0
+		end
+		return stack:get_count()
+	end,
+	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+		return stack:get_count()
+	end,
 	on_metadata_inventory_move = function(pos, from_list, from_index,
 			to_list, to_index, count, player)
 		minetest.node_metadata_inventory_move_allow_all(
@@ -187,12 +209,7 @@ minetest.register_node("workbench:4x4", {
 			end
 		end
 	end,
-	on_metadata_inventory_offer = function(pos, listname, index, stack, player)
-		if listname == "dst" then
-			return stack
-		end
-		local post = minetest.node_metadata_inventory_offer_allow_all(
-				pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, listname, index, stack, player)
 		if listname == "table" then
 			local meta = minetest.env:get_meta(pos)
 			local inv = meta:get_inventory()
@@ -209,11 +226,8 @@ minetest.register_node("workbench:4x4", {
 				inv:set_stack("dst", 1, nil)
 			end
 		end
-		return post
 	end,
 	on_metadata_inventory_take = function(pos, listname, index, count, player)
-		local post = minetest.node_metadata_inventory_take_allow_all(
-				pos, listname, index, count, player)
 		if listname == "table" then
 			local meta = minetest.env:get_meta(pos)
 			local inv = meta:get_inventory()
@@ -258,7 +272,6 @@ minetest.register_node("workbench:4x4", {
 				inv:set_stack("dst", 1, nil)
 			end
 		end
-		return post
 	end,
 })
 
@@ -289,6 +302,21 @@ minetest.register_node("workbench:5x5", {
 		end
 		return false
 	end,
+	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+		if to_list == "dst" then
+			return 0
+		end
+		return count
+	end,
+	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+		if listname == "dst" then
+			return 0
+		end
+		return stack:get_count()
+	end,
+	allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+		return stack:get_count()
+	end,
 	on_metadata_inventory_move = function(pos, from_list, from_index,
 			to_list, to_index, count, player)
 		minetest.node_metadata_inventory_move_allow_all(
@@ -310,12 +338,7 @@ minetest.register_node("workbench:5x5", {
 			end
 		end
 	end,
-	on_metadata_inventory_offer = function(pos, listname, index, stack, player)
-		if listname == "dst" then
-			return stack
-		end
-		local post = minetest.node_metadata_inventory_offer_allow_all(
-				pos, listname, index, stack, player)
+	on_metadata_inventory_put = function(pos, listname, index, stack, player)
 		if listname == "table" then
 			local meta = minetest.env:get_meta(pos)
 			local inv = meta:get_inventory()
@@ -332,11 +355,8 @@ minetest.register_node("workbench:5x5", {
 				inv:set_stack("dst", 1, nil)
 			end
 		end
-		return post
 	end,
 	on_metadata_inventory_take = function(pos, listname, index, count, player)
-		local post = minetest.node_metadata_inventory_take_allow_all(
-				pos, listname, index, count, player)
 		if listname == "table" then
 			local meta = minetest.env:get_meta(pos)
 			local inv = meta:get_inventory()
@@ -381,7 +401,6 @@ minetest.register_node("workbench:5x5", {
 				inv:set_stack("dst", 1, nil)
 			end
 		end
-		return post
 	end,
 })
 
