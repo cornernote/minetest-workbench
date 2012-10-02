@@ -24,6 +24,8 @@
 -- set inventory_craft_small=1 in minetest.conf to limit inventory craft to 2x2
 if minetest.setting_getbool("inventory_craft_small") then
 	minetest.register_on_joinplayer(function(player)
+		player:get_inventory():set_width("craft", 2)
+		player:get_inventory():set_size("craft", 4)
 		player:set_inventory_formspec("size[8,7.5]"
 			.."list[current_player;main;0,3.5;8,4;]"
 			.."list[current_player;craft;3,0.5;2,2;]"
@@ -41,9 +43,10 @@ workbench.on_construct = function(pos,size)
 	local inv = meta:get_inventory()
 	inv:set_size("dst", 1)
 	inv:set_size("table", size*size)
+	inv:set_width("craft", size)
 	meta:set_string("formspec", "size[8,"..(size+4.5).."]"
 		.."list[current_name;dst;6,2;1,1;]"
-		.."list[current_player;main;0,5;8,4;]"
+		.."list[current_player;main;0,"..(size+0.5)..";8,4;]"
 		.."list[current_name;table;0,0;"..size..","..size..";]")
 	meta:set_string("infotext", size.."x"..size.." WorkBench")
 	meta:set_int("size", size)
@@ -198,30 +201,30 @@ end
 
 -- register workbenches
 workbench.register(3, {
-	{'"default:wood"','"default:wood"'},
-	{'"default:wood"','"default:wood"'},
+	{"default:wood","default:wood"},
+	{"default:wood","default:wood"},
 })
 workbench.register(4, {
-	{'"default:stone"','"default:stone"','"default:stone"'},
-	{'"default:wood"','"default:wood"','"default:wood"'},
-	{'"default:wood"','"default:wood"','"default:wood"'},
+	{"default:stone","default:stone","default:stone"},
+	{"default:wood","default:wood","default:wood"},
+	{"default:wood","default:wood","default:wood"},
 })
 workbench.register(5, {
-	{'"default:steel_ingot"','"default:steel_ingot"','"default:steel_ingot"','"default:steel_ingot"'},
-	{'"default:wood"','"default:wood"','"default:wood"','"default:wood"'},
-	{'"default:wood"','"default:wood"','"default:wood"','"default:wood"'},
-	{'"default:wood"','"default:wood"','"default:wood"','"default:wood"'},
+	{"default:steel_ingot","default:steel_ingot","default:steel_ingot","default:steel_ingot"},
+	{"default:wood","default:wood","default:wood","default:wood"},
+	{"default:wood","default:wood","default:wood","default:wood"},
+	{"default:wood","default:wood","default:wood","default:wood"},
 })
 
 -- register test crafts
 minetest.register_craft({
-	output = '"default:mese"',
+	output = "default:mese",
 	recipe = {
-		{'"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"'},
-		{'"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"'},
-		{'"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"'},
-		{'"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"'},
-		{'"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"','"default:steelblock"'},
+		{"default:steelblock","default:steelblock","default:steelblock","default:steelblock","default:steelblock"},
+		{"default:steelblock","default:steelblock","default:steelblock","default:steelblock","default:steelblock"},
+		{"default:steelblock","default:steelblock","default:steelblock","default:steelblock","default:steelblock"},
+		{"default:steelblock","default:steelblock","default:steelblock","default:steelblock","default:steelblock"},
+		{"default:steelblock","default:steelblock","default:steelblock","default:steelblock","default:steelblock"},
 	}
 })
 minetest.register_craft({
