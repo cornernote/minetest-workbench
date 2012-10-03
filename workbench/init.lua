@@ -44,8 +44,8 @@ end
 workbench = {}
 
 -- on_construct
-workbench.on_construct = function(pos,width)
-	width = tonumber(width)
+workbench.on_construct = function(pos)
+	local width = minetest.get_item_group(minetest.get_node(pos), "craft_width")
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
 	inv:set_size("craftresult", 1)
@@ -159,15 +159,13 @@ end
 -- register
 workbench.register = function(width, recipe)
 	minetest.register_node("workbench:"..width.."x"..width, {
-		description = "WorkBench",
+		description = "WorkBench "..width.."x"..width,
 		tile_images = {"workbench_"..width.."x"..width.."_top.png","workbench_"..width.."x"..width.."_bottom.png","workbench_"..width.."x"..width.."_side.png"},
 		paramtype2 = "facedir",
-		groups = {cracky=2},
+		groups = {cracky=2,craft_width=width},
 		legacy_facedir_simple = true,
 		sounds = default.node_sound_wood_defaults(),
-		on_construct = function(pos)
-			workbench.on_construct(pos, width)
-		end,
+		on_construct = workbench.on_construct,
 		can_dig = workbench.can_dig,
 		allow_metadata_inventory_move = workbench.allow_metadata_inventory_move,
 		allow_metadata_inventory_put = workbench.allow_metadata_inventory_put,
@@ -226,3 +224,114 @@ minetest.register_craft({
         "default:water_source",
     },
 })
+
+-- inventory_plus
+if minetest.get_modpath("inventory_plus") then
+
+	-- get_formspec
+	local get_formspec = function(player,page)
+		if page=="workbench" then
+			return "size[8,7.5]"
+				.."list[current_player;main;0,3.5;8,4;]"
+				.."button[0,0;2,0.5;main;Back]"
+				.."button[2,0;2,0.5;workbench_craft;Craft]"
+				.."label[1.6,1.5;3x3]"
+				.."label[3.6,1.5;4x4]"
+				.."label[5.6,1.5;5x5]"
+				.."list[detached:"..player:get_player_name().."_workbench;workbench3;1.5,2;1,1;]"
+				.."list[detached:"..player:get_player_name().."_workbench;workbench4;3.5,2;1,1;]"
+				.."list[detached:"..player:get_player_name().."_workbench;workbench5;5.5,2;1,1;]"
+		end
+		-- craft page
+		if page=="workbench_craft" then
+			local width = 2
+			local inv = player:get_inventory()
+			if not inv:get_stack("workbench5", 1):is_empty() then
+				width = 5
+			elseif not inv:get_stack("workbench4", 1):is_empty() then
+				width = 4
+			elseif not inv:get_stack("workbench3", 1):is_empty() then
+				width = 3
+			end
+			player:get_inventory():set_width("craft", width)
+			player:get_inventory():set_size("craft", width*width)
+			return "size[8,"..(width+5.5).."]"
+				.."button[0,0;2,0.5;main;Back]"
+				.."button[2,0;2,0.5;workbench;Workbench]"
+				.."list[current_player;craftpreview;6,"..math.floor(width/2+1)..";1,1;]"
+				.."list[current_player;craft;"..(6-width)..",1;"..width..","..width..";]"
+				.."list[current_player;main;0,"..(width+1.5)..";8,4;]"
+		end
+	end
+
+	-- register_on_player_receive_fields
+	minetest.register_on_player_receive_fields(function(player, formname, fields)
+		if fields.workbench then
+			inventory_plus.set_inventory_formspec(player, get_formspec(player,"workbench"))
+			return
+		end
+		if fields.workbench_craft then
+			inventory_plus.set_inventory_formspec(player, get_formspec(player,"workbench_craft"))
+			return
+		end
+	end)
+
+	-- register_on_joinplayer
+	minetest.register_on_joinplayer(function(player)
+
+		inventory_plus.register_button(player,"workbench_craft","Craft")
+		inventory_plus.register_button(player,"workbench","Workbench")
+		inventory_plus.buttons[player:get_player_name()]["craft"] = nil
+		
+		local player_inv = player:get_inventory()
+		local workbench_inv = minetest.create_detached_inventory(player:get_player_name().."_workbench",{
+			on_put = function(inv, listname, index, stack, player)
+				player:get_inventory():set_stack(listname, index, stack)
+			end,
+			on_take = function(inv, listname, index, stack, player)
+				player:get_inventory():set_stack(listname, index, nil)
+			end,
+			allow_put = function(inv, listname, index, stack, player)
+				local width = stack:get_definition().groups.craft_width
+				if width then
+					if listname=="workbench3" and width==3 then
+						return 1
+					end
+					if listname=="workbench4" and width==4 and not inv:get_stack("workbench3",1):is_empty() then
+						return 1
+					end
+					if listname=="workbench5" and width==5 and not inv:get_stack("workbench4",1):is_empty() and  not inv:get_stack("workbench3",1):is_empty() then
+						return 1
+					end
+				end
+				return 0
+			end,
+			allow_take = function(inv, listname, index, stack, player)
+				if listname=="workbench3" and inv:get_stack("workbench4",1):is_empty() and inv:get_stack("workbench5",1):is_empty() then
+					return 1
+				end
+				if listname=="workbench4" and inv:get_stack("workbench5",1):is_empty() then
+					return 1
+				end
+				if listname=="workbench5" then
+					return 1
+				end
+				return 0
+			end,
+			allow_move = function(inv, from_list, from_index, to_list, to_index, count, player)
+				return 0
+			end,
+		})
+		for i=3,5 do
+			local workbench = "workbench"..i
+			player_inv:set_size(workbench, 1)
+			workbench_inv:set_size(workbench, 1)
+			workbench_inv:set_stack(workbench,1,player_inv:get_stack(workbench,1))
+		end
+		
+		minetest.after(2,function()
+			inventory_plus.set_inventory_formspec(player,get_formspec(player, "workbench_craft"))
+		end)
+		
+	end)
+end
