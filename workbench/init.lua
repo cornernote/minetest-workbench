@@ -45,7 +45,7 @@ workbench = {}
 
 -- on_construct
 workbench.on_construct = function(pos)
-	local width = minetest.get_item_group(minetest.get_node(pos), "craft_width")
+	local width = minetest.get_item_group(minetest.env:get_node(pos), "craft_width")
 	local meta = minetest.env:get_meta(pos)
 	local inv = meta:get_inventory()
 	inv:set_size("craftresult", 1)
